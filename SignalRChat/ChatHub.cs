@@ -74,6 +74,25 @@ namespace SignalRChat
 
         }
 
+        public void SendPrivatePicture(string toUserId, string picture)
+        {
+
+            string fromUserId = Context.ConnectionId;
+
+            var toUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == toUserId);
+            var fromUser = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == fromUserId);
+
+            if (toUser != null && fromUser != null)
+            {
+                // send to 
+                Clients.Client(toUserId).sendPrivatePicture(fromUserId, fromUser.UserName, picture);
+
+                // send to caller user
+                Clients.Caller.sendPrivatePicture(toUserId, fromUser.UserName, picture);
+            }
+
+        }
+
         public override System.Threading.Tasks.Task OnDisconnected()
         {
             var item = ConnectedUsers.FirstOrDefault(x => x.ConnectionId == Context.ConnectionId);
