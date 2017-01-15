@@ -15,18 +15,25 @@ namespace SignalRChat
         static List<UserDetail> ConnectedUsers = new List<UserDetail>();
         static List<MessageDetail> CurrentMessage = new List<MessageDetail>();
 
+        private static readonly string[] Colors = new[]
+        {
+            "Red", "Orange", "Yellow", "Cyan", "Blue", "Black", "Chartreuse", "DarkGoldenRod", "DarkMagenta",
+            "DarkSeaGreen", "DeepPink", "Gold", "MistyRose", "YellowGreen"
+        };
+
         #endregion
 
-        #region Methods
+            #region Methods
 
         public void Connect(string userName)
         {
             var id = Context.ConnectionId;
 
+            Random random = new Random();
 
             if (ConnectedUsers.Count(x => x.ConnectionId == id) == 0)
             {
-                ConnectedUsers.Add(new UserDetail { ConnectionId = id, UserName = userName, Color = "red" });
+                ConnectedUsers.Add(new UserDetail { ConnectionId = id, UserName = userName, Color = Colors[random.Next(0,Colors.Length-1)] });
 
                 // send to caller
                 Clients.Caller.onConnected(id, userName, ConnectedUsers, CurrentMessage);
@@ -45,7 +52,7 @@ namespace SignalRChat
             var mess=AddMessageinCache(userName, message);
 
             // Broad cast message
-            Clients.All.messageReceived(mess.UserName, mess.Message,mess.Color);
+            Clients.All.messageReceived(mess.UserName,mess.Message,mess.Color);
         }
 
         public void SendPrivateMessage(string toUserId, string message)

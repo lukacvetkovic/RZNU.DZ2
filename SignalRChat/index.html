@@ -156,9 +156,9 @@
 
             }
 
-            chatHub.client.messageReceived = function (userName, message) {
+            chatHub.client.messageReceived = function (userName, message, color) {
 
-                AddMessage(userName, message);
+                AddMessage(userName, message, color);
             }
 
 
@@ -215,7 +215,7 @@
         function AddMessage(userName, message, color) {
 
             console.log(userName + "," + message + "," + color);
-            $('#divChatWindow').append('<div class="message"><span class="userName">' + userName + '</span>: <p>'+message+'<span style="color:'+color+'"></span></p></div>');
+            $('#divChatWindow').append('<div class="message"><span class="userName"><font color="' + color + '">' + userName + ':'+'</font></span> <font color="' + color + '">' + message + '</font></div>');
 
             var height = $('#divChatWindow')[0].scrollHeight;
             $('#divChatWindow').scrollTop(height);
